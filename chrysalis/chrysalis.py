@@ -23,10 +23,9 @@ from .live_video_image import LiveVideoImage
 from .past_video_image import PastVideoImage
 from .chunker import Chunker, ChImage
 from .probe import Probe, ProbeInfo
-from .hls import HLS
 import sys
 
-class RtmpMedia:
+class Connect:
     """
     This class represents main Rtmp Media stream from Chrysalis Cloud server
 

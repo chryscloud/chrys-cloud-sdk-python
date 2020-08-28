@@ -19,7 +19,7 @@ from datetime import datetime, timedelta
 import chrysalis
 from chrysalis.ch_errors import VideoFailedToStart
 
-ch = chrysalis.RtmpMedia(host="127.0.0.1", port="1111", password="aaaaaaaa", ssl_ca_cert="server.crt")
+ch = chrysalis.Connect(host="127.0.0.1", port="1111", password="aaaaaaaa", ssl_ca_cert="server.crt")
 
 class TestInit(TestCase):
 

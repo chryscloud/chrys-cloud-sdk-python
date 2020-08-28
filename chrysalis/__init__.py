@@ -13,5 +13,5 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from chrysalis.chrysalis import RtmpMedia
+from chrysalis.chrysalis import Connect
 from chrysalis.ch_errors import VideoFailedToStart, VideoHistoryNotFound, InfrequentException

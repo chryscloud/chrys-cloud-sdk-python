@@ -1,4 +1,4 @@
-# Chrysalis Python Cloud SDK
+# Python Chrysalis Cloud SDK
 
 This repository houses the official Chrysalis Cloud Python SDK for use with [Chryscloud.com](https://chryscloud.com/) cloud, end-to-end media streaming and analytics platform.
 
@@ -12,10 +12,13 @@ If you're looking for a hybrid edge-cloud solution we recommend you look into ou
 - [Prerequisite](#prerequisite)
 - [Installation](#installation)
 - [Usage](#usage)
-    - [Probing](#probing-the-stream)
-    - [Thumbnail from video](#Thumbnail-image-from-video-stream)
-    - [Live stream with OpenCV](#displaying-live-stream-with-opencv)
-    - [HLS streaming](#hls-streaming)
+    - [Probing](#probe)
+    - [Live stream frames](#retrieve-latest-video-image-from-a-live-stream)
+    - [Buffered frames in the past](#retrieve-video-images-from-the-past)
+    - [Thumbnail image from video stream](#thumbnail-image-from-video-stream)
+    - [Turn permanent storage on/off](#turn-storage-on-and-off)
+    - [Example](#example)
+      - [Live stream with OpenCV](#display-live-stream-with-opencv)
 - [Development](#development)
     - [Mac OS X](#mac-os-x)
     - [Ubuntu >= 18.04 LTS](#mac-os-x)
@@ -50,19 +53,22 @@ You can easily add to this file dependencies and additional image manipulation l
 
 
 ```yaml
-name: chryssdk
+name: chryssdktest
 channels:
   - conda-forge
 dependencies:
   - ca-certificates=2020.1.1=0
   - certifi=2020.4.5.1=py37_0
+  - pip=20.0.2=py37_1
+  - wheel=0.34.2=py37_0
   - python=3.7.7=hcf32534_0_cpython
+  - opencv=4.2.0
   - av=7.0.1
   - numpy=1.18.1
   - redis-py=3.4.1
   - pip:
-    - chryssdk=1.0.0
     - Cython
+    - chrysalis==1.0.0
 ```
 
 Create new conda environment:
@@ -72,15 +78,19 @@ conda env create -f environment.yml
 
 ## Usage
 
-Probing returns information about the streaming media. It gives you a sense if the camera is streaming, when it was last seen, what is the frame cache duration stored on the Chrysalis streaming server.
+- all returned images are in numpy format.
+- all returned images are in bgr24 pixel format.
 
-- all images are in numpy format.
-- all images are in bgr24 pixel format.
+Check ChImage attributes for more details
+
+### Probe
+
+Probing returns information about the streaming media. It gives you a sense if the camera is streaming, when it was last seen, what is the frame cache duration stored on the Chrysalis streaming server.
 
 ```python
 import chrysalis
 # connection to Chrysalis Cloud
-chrys = chrysalis.RtmpMedia(host="https://myserver.at.chrysvideo.com", port="1234", password="mypassword", ssl_ca_cert="mycert.cer")
+chrys = chrysalis.Connect(host="https://myserver.at.chrysvideo.com", port="1234", password="mypassword", ssl_ca_cert="mycert.cer")
 # returns ProbeInfo object
 probe = chrys.Probe()
 print("start {}, end {}, duration {} s, assessed fps {}".format(probe.start_timestamp, probe.end_timestamp, probe.duration, probe.fps))
@@ -112,7 +122,7 @@ Chrysalis Cloud Python SDK takes care of delivering crisp and clear images from 
 import chrysalis
 
 # connection to Chrysalis Cloud
-chrys = chrysalis.RtmpMedia(host="https://myserver.at.chrysvideo.com", port="1234", password="mypassword", ssl_ca_cert="mycert.cer")
+chrys = chrysalis.Connect(host="https://myserver.at.chrysvideo.com", port="1234", password="mypassword", ssl_ca_cert="mycert.cer")
 
 # Perpetual reading of the stream
 while True:
@@ -125,6 +135,8 @@ while True:
 ```python
 ChImage Attributes
     ----------
+    data: numpy
+        Image stored in numpy in bgr24 format
     start_timestamp : int
         Earlies contained media data in video stream cache
     end_timestamp : int
@@ -152,7 +164,7 @@ Based on what is available in the frame cache on Chrysalis streaming nodes you c
 import chrysalis
 
 # connection to Chrysais Cloud
-chrys = chrysalis.RtmpMedia(hos="https://myserver.at.chrysvideo.com", prt="1234", password="mypassword", ssl_ca_cert="mycert.cer")
+chrys = chrysalis.Connect(hos="https://myserver.at.chrysvideo.com", prt="1234", password="mypassword", ssl_ca_cert="mycert.cer")
 
 probe = ch.Probe()
 start = probe.end_timestamp - (1000 * 30) # 30 seconds in the past
@@ -171,7 +183,7 @@ Thumbnails are in `bgr24 format in numpy array`. In fact all images for local co
 ```python
 import chrysalis
 
-chrys = chrysalis.RtmpMedia(host="https://myserver.at.chrysalis.com", port="1234", password="mypassword", ssl_ca_cert="mycert.crt")
+chrys = chrysalis.Connect(host="https://myserver.at.chrysalis.com", port="1234", password="mypassword", ssl_ca_cert="mycert.crt")
 
  d = datetime.today() - timedelta(hours=0, minutes=0, seconds=2)
 img = chrys.Screenshot(dt=d)
@@ -187,13 +199,17 @@ Based on video analysis you can decide to store a stream into the permanent Chry
 
 `Coming soon`
 
-## Example: Display live stream with OpenCV
+## Example
+
+All examples are in `/examples` folder. Create conda environment from prepared `environment.yml` in examples folder before you run the examples.  
+
+### Display live stream with OpenCV
 
 ```python
 import chrysalis
 
 # connection to Chrysalis Cloud
-chrys = chrysalis.RtmpMedia(host="https://myserver.at.chrysalis.com", port="1234", password="mypassword", ssl_ca_cert="mycert.cer")
+chrys = chrysalis.Connect(host="https://myserver.at.chrysalis.com", port="1234", password="mypassword", ssl_ca_cert="mycert.cer")
 
 # Perpetual reading of the stream
 while True:
@@ -270,4 +286,16 @@ cd ChrysalisPythonSDK
 sudo pip install -e . 
 ```
 This should install it's dependencies also. 
+
+# Contributing
+
+Please read `CONTRIBUTING.md` for details on our code of conduct, and the process of submitting pull requests to us. 
+
+# Versioning
+
+Current version is initial release - 1.0.0
+
+# License
+
+This project is licensed under Apache 2.0 License - see the `LICENSE` for details.
 
