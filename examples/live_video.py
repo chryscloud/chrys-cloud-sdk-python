@@ -4,7 +4,7 @@ import cv2
 import os
 from time import strftime
 
-ch = chrysalis.RtmpMedia(host="127.0.0.1", port="1111", password="aaaaaaaaa", ssl_ca_cert="test.cer")
+ch = chrysalis.Connect(host="127.0.0.1", port="1111", password="aaaaaaaaa", ssl_ca_cert="test.cer")
 
 os.environ['DISPLAY'] = ":0"
 
