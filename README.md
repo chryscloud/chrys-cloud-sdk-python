@@ -37,11 +37,16 @@ If you're looking for a hybrid edge-cloud solution we recommend you look into ou
 
 - [Install anaconda](https://docs.anaconda.com/anaconda/install/)
 - [Install FFmpeg > 4.0](https://ffmpeg.org/download.html)
+- [Add RTMP camera on Chrysalis Platform](https://chryscloud.com)
 
 Check `FFmpeg` version:
 ```
 ffmpeg -version
 ```
+
+### Adding RTMP camera on Chrysalis Developer Platform
+
+
 
 ## Installation
 
@@ -53,7 +58,7 @@ You can easily add to this file dependencies and additional image manipulation l
 
 
 ```yaml
-name: chryssdktest
+name: chrysalis
 channels:
   - conda-forge
 dependencies:
@@ -202,6 +207,16 @@ Based on video analysis you can decide to store a stream into the permanent Chry
 ## Example
 
 All examples are in `/examples` folder. Create conda environment from prepared `environment.yml` in examples folder before you run the examples.  
+
+Create environment:
+```
+conda env create -f environment.yml
+```
+
+Activate examples environment:
+```
+conda activate chrysexamples
+```
 
 ### Display live stream with OpenCV
 

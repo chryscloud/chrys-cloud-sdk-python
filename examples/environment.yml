@@ -1,4 +1,4 @@
-name: chryssdktest
+name: chrysexamples
 channels:
   - conda-forge
 dependencies:
